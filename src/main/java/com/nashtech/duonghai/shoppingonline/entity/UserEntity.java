@@ -2,8 +2,10 @@ package com.nashtech.duonghai.shoppingonline.entity;
 
 import com.nashtech.duonghai.shoppingonline.other.constant.Provider;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
@@ -12,8 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "users",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
+                @UniqueConstraint(columnNames = "username")
         })
 @Setter
 @Getter
@@ -53,6 +54,12 @@ public class UserEntity extends BaseEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> roles;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<ShoppingCartEntity> shoppingCarts;
+
+    @OneToMany(mappedBy = "orderOwner", cascade = CascadeType.ALL)
+    private List<OrderEntity> shoppingOrders;
 
     public UserEntity() {
     }

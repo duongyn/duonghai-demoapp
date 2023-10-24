@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class SuccessAuthenHandler implements AuthenticationSuccessHandler {
+public class SuccessAuthenticateHandler implements AuthenticationSuccessHandler {
 
     @Autowired
     private UserService userService;
