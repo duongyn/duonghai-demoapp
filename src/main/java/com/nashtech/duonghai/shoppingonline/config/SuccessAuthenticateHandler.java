@@ -1,7 +1,9 @@
 package com.nashtech.duonghai.shoppingonline.config;
 
 import com.nashtech.duonghai.shoppingonline.dto.UserDTO;
+import com.nashtech.duonghai.shoppingonline.entity.UserEntity;
 import com.nashtech.duonghai.shoppingonline.other.constant.Provider;
+import com.nashtech.duonghai.shoppingonline.repository.UserRepository;
 import com.nashtech.duonghai.shoppingonline.security.oauth2.CustomOAuth2User;
 import com.nashtech.duonghai.shoppingonline.service.UserService;
 import jakarta.servlet.ServletException;
@@ -23,14 +25,18 @@ public class SuccessAuthenticateHandler implements AuthenticationSuccessHandler 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private UserDTO userDTO = new UserDTO();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
         customInfo(oauthUser.getAttributes());
-        userService.save(userDTO);
-
+        if(userRepository.findByUsername(userDTO.getUsername()).isEmpty()) {
+            userService.save(userDTO);
+        }
         response.sendRedirect("/loginSuccess");
     }
 
